@@ -1,6 +1,5 @@
 export class Createship {
-    constructor(Name, length, HitsCounter = 0, isSunk = false) {
-        this.Name = Name;
+    constructor(length, HitsCounter = 0, isSunk = false) {
         this.length = length;
         this.HitsCounter = HitsCounter;
         this.isSunk = isSunk;
