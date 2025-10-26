@@ -5,6 +5,8 @@ export class GameBoard {
     constructor() {
         this.Record = new Array(5).fill(0, 0, 4)
         this.PlayerBoard = []
+        this.ship = []
+        this.MissedShot = []
     }
 
     BuildBoard() {
@@ -16,26 +18,48 @@ export class GameBoard {
         return this.PlayerBoard;
     }
 
+    CheckPosition(X_axis, Y_axis, length) {
+        if (X_axis > 10 || X_axis < 0 || Y_axis > 10 || Y_axis < 0) {
+            return false
+        }
+
+        if (X_axis + length - 1 > 9 || Y_axis + length - 1 > 9) {
+            return false
+        }
+
+        for (let i = X_axis; i > X_axis; i++) {
+            if (this.PlayerBoard[Y_axis][i] === 1) {
+                return false
+            }
+        }
+
+        return true
+    }
+
     PlaceShip(X_axis, Y_axis, length) {
-        if (length < 0 || length > 4) {
-            return "Length is incorrect"
+        if (this.CheckPosition(X_axis, Y_axis, length)) {
+            const BuildNewShip = new Createship(length);
+
+            for (let i = X_axis; i < X_axis + length; i++) {
+                this.PlayerBoard[Y_axis][i] = 1
+            }
+            return this.PlayerBoard
+        } else {
+            return "X_axis or Y_axis is wrong !"
         }
-        if (X_axis - 1 > 10 || Y_axis - 1 > 10 || X_axis - 1 < 0 || Y_axis - 1 < 0) {
-            return "X_axis or Y_axis are wrong"
+    }
+
+    receiveAttack(X_axis, Y_axis) {
+        if (this.PlayerBoard[Y_axis][X_axis] === 1) {
+            
+        } else {
+            this.MissedShot.push([X_axis, Y_axis])
         }
-        if (X_axis + length - 1 > 10 || Y_axis + length - 1 > 10) {
-            return
-        }
-        this.Record.push(X_axis, Y_axis)
-        const BuildNewShip = new Createship(length);
-        for (let i = X_axis; i < X_axis + length; i++) {
-            this.PlayerBoard[Y_axis - 1][i - 1] = 1
-        }
-        return this.PlayerBoard
     }
 
     reset() {
-        this.BuildBoard()
+        this.PlayerBoard = []
+        return this.BuildBoard()
     }
 }
 
