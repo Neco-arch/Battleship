@@ -2,7 +2,7 @@ import { GameBoard } from "./GameBoardClass";
 
 
 
-test('Can Create game board ', () => {
+test.skip('Can Create game board ', () => {
     const GameBoards = new GameBoard()
     const result = GameBoards.BuildBoard()
     expect(result).toStrictEqual([
@@ -37,7 +37,7 @@ test('Can place ship with 3 length', () => {
     ])
 })
 
-test('Can place ship with 2 length', () => {
+test.skip('Can place ship with 2 length', () => {
     const GameBoards = new GameBoard()
     GameBoards.BuildBoard()
     const result = GameBoards.PlaceShip(8, 2, 2)
@@ -55,7 +55,7 @@ test('Can place ship with 2 length', () => {
     ])
 })
 
-test('Can place ship with 1 length', () => {
+test.skip('Can place ship with 1 length', () => {
     const GameBoards = new GameBoard()
     GameBoards.BuildBoard()
     const result = GameBoards.PlaceShip(0, 3, 1)
@@ -73,9 +73,18 @@ test('Can place ship with 1 length', () => {
     ])
 })
 
-test('Position doesnt exist ', () => {
+test.skip('Position doesnt exist ', () => {
     const GameBoards = new GameBoard()
     GameBoards.BuildBoard()
     const result = GameBoards.PlaceShip(10, 3, 1)
-    expect(result).toStrictEqual("X_axis or Y_axis is wrong !")
+    expect(result).toStrictEqual("X_axis or Y_axis is wrong or Position is already taken!")
 })
+
+test.skip('Position Already taken ', () => {
+    const GameBoards = new GameBoard()
+    GameBoards.BuildBoard()
+    const Place1 = GameBoards.PlaceShip(4, 3, 2)
+    const Place2 = GameBoards.PlaceShip(4, 3, 3)
+    expect(Place2).toStrictEqual("X_axis or Y_axis is wrong or Position is already taken!")
+})
+

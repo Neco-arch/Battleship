@@ -1,12 +1,12 @@
 import { Createship } from "./ShipClass";
 
 export class GameBoard {
-
     constructor() {
-        this.Record = new Array(5).fill(0, 0, 4)
-        this.PlayerBoard = []
-        this.ship = []
-        this.MissedShot = []
+        this.Record = new Array(5).fill(0, 0, 4);
+        this.PlayerBoard = [];
+        this.ship = [];
+        this.MissedShot = [];
+        this.shipCounter = 0
     }
 
     BuildBoard() {
@@ -20,47 +20,54 @@ export class GameBoard {
 
     CheckPosition(X_axis, Y_axis, length) {
         if (X_axis > 10 || X_axis < 0 || Y_axis > 10 || Y_axis < 0) {
-            return false
+            return false;
         }
 
         if (X_axis + length - 1 > 9 || Y_axis + length - 1 > 9) {
-            return false
+            return false;
         }
 
-        for (let i = X_axis; i > X_axis; i++) {
+        for (let i = X_axis; i < X_axis + length; i++) {
             if (this.PlayerBoard[Y_axis][i] === 1) {
-                return false
+                return false;
+            } else {
+                continue;
             }
         }
 
-        return true
+        return true;
     }
 
     PlaceShip(X_axis, Y_axis, length) {
         if (this.CheckPosition(X_axis, Y_axis, length)) {
-            const BuildNewShip = new Createship(length);
-
+            const CreateShip = new Createship(length)
+            this.ship.push({
+                length: CreateShip.length,
+                HitCounter: CreateShip.HitsCounter,
+                Position: []
+            })
+            this.shipCounter++
             for (let i = X_axis; i < X_axis + length; i++) {
-                this.PlayerBoard[Y_axis][i] = 1
+                this.PlayerBoard[Y_axis][i] = 1;
+                this.ship[this.shipCounter - 1].Position.push([X_axis, Y_axis])
             }
-            return this.PlayerBoard
+
+            return this.PlayerBoard;
         } else {
-            return "X_axis or Y_axis is wrong !"
+            return "X_axis or Y_axis is wrong or Position is already taken!";
         }
     }
 
     receiveAttack(X_axis, Y_axis) {
         if (this.PlayerBoard[Y_axis][X_axis] === 1) {
-            
+
         } else {
-            this.MissedShot.push([X_axis, Y_axis])
+            this.MissedShot.push([X_axis, Y_axis]);
         }
     }
 
     reset() {
-        this.PlayerBoard = []
-        return this.BuildBoard()
+        this.PlayerBoard = [];
+        return this.BuildBoard();
     }
 }
-
-
