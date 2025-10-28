@@ -6,7 +6,7 @@ export class GameBoard {
         this.PlayerBoard = [];
         this.ship = [];
         this.MissedShot = [];
-        this.shipCounter = 0
+        this.shipCounter = 0;
     }
 
     BuildBoard() {
@@ -39,19 +39,16 @@ export class GameBoard {
     }
 
     PlaceShip(X_axis, Y_axis, length) {
+        const OldX_axis = X_axis;
         if (this.CheckPosition(X_axis, Y_axis, length)) {
-            const CreateShip = new Createship(length)
-            this.ship.push({
-                length: CreateShip.length,
-                HitCounter: CreateShip.HitsCounter,
-                Position: []
-            })
-            this.shipCounter++
-            for (let i = X_axis; i < X_axis + length; i++) {
+            const CreateShip = new Createship(length);
+            this.shipCounter++;
+            for (let i = OldX_axis; i < OldX_axis + length; i++) {
                 this.PlayerBoard[Y_axis][i] = 1;
-                this.ship[this.shipCounter - 1].Position.push([X_axis, Y_axis])
+                CreateShip.position.push([X_axis, Y_axis]);
+                X_axis++;
             }
-
+            this.ship.push(CreateShip);
             return this.PlayerBoard;
         } else {
             return "X_axis or Y_axis is wrong or Position is already taken!";
@@ -59,15 +56,38 @@ export class GameBoard {
     }
 
     receiveAttack(X_axis, Y_axis) {
-        if (this.PlayerBoard[Y_axis][X_axis] === 1) {
+        const ShipNode = this.FindShipName(X_axis, Y_axis);
+    }
 
+    FindShipName(X_axis, Y_axis) {
+        let Findshipname = null;
+        let parent = null;
+        if (this.PlayerBoard[Y_axis][X_axis] === 1) {
+            for (let [index, Elements] of this.ship.entries()) {
+                if (Findshipname === null) {
+                    let firstpath = this.ship[index].position;
+                    parent = this.ship[index];
+                    for (let i = 0; i < firstpath.length; i++) {
+                        if (firstpath[i][0] === X_axis && firstpath[i][1] === Y_axis) {
+                            return parent;
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
         } else {
-            this.MissedShot.push([X_axis, Y_axis]);
+            this.MissedShot.push(X_axis, Y_axis);
+            return "No ship found";
         }
     }
 
     reset() {
         this.PlayerBoard = [];
         return this.BuildBoard();
+    }
+
+    test() {
+        return this.ship;
     }
 }
