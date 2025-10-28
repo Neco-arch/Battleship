@@ -85,7 +85,7 @@ test.skip("Position Already taken ", () => {
     GameBoards.BuildBoard();
     const Place1 = GameBoards.PlaceShip(4, 3, 2);
     const Place2 = GameBoards.PlaceShip(4, 3, 3);
-    expect(Place2).toStrictEqual(
+    expect(Place2).toEqual(
         "X_axis or Y_axis is wrong or Position is already taken!"
     );
 });
@@ -94,7 +94,7 @@ test("Can dectect ship name", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
     const Place1 = GameBoards.PlaceShip(4, 3, 2);
-    const findship = GameBoards.FindShipName(4, 3)
-    expect(GameBoards.ship).toStrictEqual();
+    const findship = GameBoards.FindShipName(4, 2)
+    expect(findship).toEqual({ "HitsCounter": 0, "isSunk": false, "length": 2, "position": [[4, 3], [5, 3]] });
 });
 
