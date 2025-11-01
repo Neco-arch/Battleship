@@ -1,6 +1,6 @@
 import { GameBoard } from "./GameBoardClass";
 
-test.skip("Can Create game board ", () => {
+test("Can Create game board ", () => {
     const GameBoards = new GameBoard();
     const result = GameBoards.BuildBoard();
     expect(result).toStrictEqual([
@@ -17,7 +17,7 @@ test.skip("Can Create game board ", () => {
     ]);
 });
 
-test.skip("Can place ship with 3 length", () => {
+test("Can place ship with 3 length", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
     const result = GameBoards.PlaceShip(1, 0, 3);
@@ -35,7 +35,7 @@ test.skip("Can place ship with 3 length", () => {
     ]);
 });
 
-test.skip("Can place ship with 2 length", () => {
+test("Can place ship with 2 length", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
     const result = GameBoards.PlaceShip(8, 2, 2);
@@ -53,7 +53,7 @@ test.skip("Can place ship with 2 length", () => {
     ]);
 });
 
-test.skip("Can place ship with 1 length", () => {
+test("Can place ship with 1 length", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
     const result = GameBoards.PlaceShip(0, 3, 1);
@@ -71,7 +71,7 @@ test.skip("Can place ship with 1 length", () => {
     ]);
 });
 
-test.skip("Position doesnt exist ", () => {
+test("Position doesnt exist ", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
     const result = GameBoards.PlaceShip(10, 3, 1);
@@ -80,7 +80,7 @@ test.skip("Position doesnt exist ", () => {
     );
 });
 
-test.skip("Position Already taken ", () => {
+test("Position Already taken ", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
     const Place1 = GameBoards.PlaceShip(4, 3, 2);
@@ -93,8 +93,26 @@ test.skip("Position Already taken ", () => {
 test("Can dectect ship name", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
-    const Place1 = GameBoards.PlaceShip(4, 3, 2);
-    const findship = GameBoards.FindShipName(4, 2)
+    GameBoards.PlaceShip(4, 3, 2);
+    const findship = GameBoards.receiveAttack(4, 3)
     expect(findship).toEqual({ "HitsCounter": 0, "isSunk": false, "length": 2, "position": [[4, 3], [5, 3]] });
 });
+
+test("Can return ship not found", () => {
+    const GameBoards = new GameBoard();
+    GameBoards.BuildBoard();
+    GameBoards.PlaceShip(4, 3, 2);
+    const findship = GameBoards.FindShipName(4, 2)
+    expect(findship).toEqual("Ship not found");
+});
+
+test("Recive attack ", () => {
+    const GameBoards = new GameBoard();
+    GameBoards.BuildBoard();
+    GameBoards.PlaceShip(4, 3, 2);
+    const findship = GameBoards.FindShipName(4, 3)
+    expect(findship).not.toEqual("Ship not found");
+});
+
+
 

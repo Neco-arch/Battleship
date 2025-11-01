@@ -15,6 +15,5 @@ export class Createship {
         if (this.HitsCounter >= this.length) {
             this.isSunk = true
         }
-        return
     }
 }
