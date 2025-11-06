@@ -1,7 +1,8 @@
 import { Createship } from "./ShipClass";
 
 export class GameBoard {
-    constructor() {
+    constructor(name) {
+        this.name = name;
         this.Record = new Array(5).fill(0);
         this.PlayerBoard = [];
         this.ship = [];
@@ -27,6 +28,7 @@ export class GameBoard {
             return false;
         }
 
+
         for (let i = X_axis; i < X_axis + length; i++) {
             if (this.PlayerBoard[Y_axis][i] === 1) {
                 return false;
@@ -36,14 +38,22 @@ export class GameBoard {
         return true;
     }
 
-    PlaceShip(X_axis, Y_axis, length) {
+    PlaceShip(X_axis, Y_axis, length, Rotate = false) {
         const OldX_axis = X_axis;
+        const OldY_axis = Y_axis;
         if (this.CheckPosition(X_axis, Y_axis, length)) {
             const CreateShip = new Createship(length);
             this.shipCounter++;
-            for (let i = OldX_axis; i < OldX_axis + length; i++) {
-                this.PlayerBoard[Y_axis][i] = 1;
-                CreateShip.position.push([i, Y_axis]);
+            if (Rotate === true) {
+                for (let i = OldY_axis; i < OldY_axis + length; i++) {
+                    this.PlayerBoard[i][X_axis] = 1;
+                    CreateShip.position.push([X_axis, i]);
+                }
+            } else {
+                for (let i = OldX_axis; i < OldX_axis + length; i++) {
+                    this.PlayerBoard[Y_axis][i] = 1;
+                    CreateShip.position.push([i, Y_axis]);
+                }
             }
             this.ship.push(CreateShip);
             return this.PlayerBoard;
@@ -54,12 +64,24 @@ export class GameBoard {
 
     receiveAttack(X_axis, Y_axis) {
         const ShipNode = this.FindShipName(X_axis, Y_axis);
+        if (ShipNode === "Ship not found") {
+            return;
+        }
+        this.PlayerBoard[Y_axis][X_axis] = "X";
+        ShipNode.hit();
+        if (ShipNode.length === ShipNode.HitsCounter) {
+            ShipNode.Check_Sunk();
+            for (let i = 0; i < this.ship.length; i++) {
+                if (this.ship[i].isSunk === true) {
+                    this.ship.splice(i, 1);
+                }
+            }
+        }
         return ShipNode;
     }
 
     FindShipName(X_axis, Y_axis) {
         if (this.PlayerBoard[Y_axis][X_axis] === 1) {
-            this.PlayerBoard[Y_axis][X_axis] = "X";
             for (let ship of this.ship) {
                 for (let pos of ship.position) {
                     if (pos[0] === X_axis && pos[1] === Y_axis) {
@@ -72,5 +94,12 @@ export class GameBoard {
             this.MissedShot.push([X_axis, Y_axis]);
             return "Ship not found";
         }
+    }
+
+    CheckAllShips() {
+        if (this.ship.length <= 0) {
+            return false;
+        }
+        return true;
     }
 }

@@ -95,7 +95,7 @@ test("Can dectect ship name", () => {
     GameBoards.BuildBoard();
     GameBoards.PlaceShip(4, 3, 2);
     const findship = GameBoards.receiveAttack(4, 3)
-    expect(findship).toEqual({ "HitsCounter": 0, "isSunk": false, "length": 2, "position": [[4, 3], [5, 3]] });
+    expect(findship).toEqual({ "HitsCounter": 1, "isSunk": false, "length": 2, "position": [[4, 3], [5, 3]] });
 });
 
 test("Can return ship not found", () => {
@@ -110,9 +110,14 @@ test("Recive attack ", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
     GameBoards.PlaceShip(4, 3, 2);
-    const findship = GameBoards.FindShipName(4, 3)
-    expect(findship).not.toEqual("Ship not found");
+    expect(GameBoards.receiveAttack(4, 3)).not.toEqual("Ship not found");
 });
 
-
+test("Can deleteship beacuse it's sunk", () => {
+    const GameBoards = new GameBoard();
+    GameBoards.BuildBoard();
+    GameBoards.PlaceShip(4, 3, 1);
+    GameBoards.receiveAttack(4, 3)
+    expect(GameBoards.ship.length).toEqual(0)
+})
 

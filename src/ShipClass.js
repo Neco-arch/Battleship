@@ -11,9 +11,9 @@ export class Createship {
         return
     }
 
-    isSunk() {
-        if (this.HitsCounter >= this.length) {
-            this.isSunk = true
-        }
+    Check_Sunk() {
+
+        this.isSunk = true
+
     }
 }
