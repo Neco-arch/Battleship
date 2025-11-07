@@ -1,12 +1,12 @@
 import { GameBoard } from "./GameBoardClass";
 
 export class player {
-    constructor(Name) {
-        this.name = Name;
+    constructor() {
+        Win = 0;
+        Lose = 0;
     }
-
     CreatePlayerBoard() {
-        const PlayerBoard = new GameBoard(this.name);
-        return PlayerBoard
+        const PlayerBoard = new GameBoard();
+        return PlayerBoard;
     }
 }
