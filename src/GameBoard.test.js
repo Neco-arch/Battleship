@@ -118,6 +118,6 @@ test("Can deleteship beacuse it's sunk", () => {
     GameBoards.BuildBoard();
     GameBoards.PlaceShip(4, 3, 1);
     GameBoards.receiveAttack(4, 3)
-    expect(GameBoards.ship.length).toEqual(0)
+    expect(GameBoards.).toEqual(0)
 })
 

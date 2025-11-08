@@ -2,11 +2,9 @@ import { GameBoard } from "./GameBoardClass";
 
 export class player {
     constructor() {
-        Win = 0;
-        Lose = 0;
-    }
-    CreatePlayerBoard() {
-        const PlayerBoard = new GameBoard();
-        return PlayerBoard;
+        this.Win = 0;
+        this.Lose = 0;
+        this.PlayerBoard = new GameBoard();
+        this.Board = this.PlayerBoard.BuildBoard()
     }
 }

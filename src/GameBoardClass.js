@@ -94,8 +94,8 @@ export class GameBoard {
     }
   }
 
-  CheckAllShips() {
-    if (this.ship.length <= 0) {
+  CheckTheGameend() {
+    if (this.ship.length < 0) {
       return false;
     }
     return true;
