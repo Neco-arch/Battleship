@@ -36,13 +36,13 @@ export class GameBoard {
     return true;
   }
 
-  PlaceShip(X_axis, Y_axis, length, Rotate = false) {
+  PlaceShip(X_axis, Y_axis, length, Verti = false) {
     const OldX_axis = X_axis;
     const OldY_axis = Y_axis;
     if (this.CheckPosition(X_axis, Y_axis, length)) {
       const CreateShip = new Createship(length);
       this.shipCounter++;
-      if (Rotate === true) {
+      if (Verti) {
         for (let i = OldY_axis; i < OldY_axis + length; i++) {
           this.PlayerBoard[i][X_axis] = 1;
           CreateShip.position.push([X_axis, i]);

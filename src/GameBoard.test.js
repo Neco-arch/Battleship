@@ -118,6 +118,25 @@ test("Can deleteship beacuse it's sunk", () => {
     GameBoards.BuildBoard();
     GameBoards.PlaceShip(4, 3, 1);
     GameBoards.receiveAttack(4, 3)
-    expect(GameBoards.).toEqual(0)
+    expect(GameBoards.CheckTheGameend()).toEqual(true)
+})
+
+test("Can place ship horizontally", () => {
+    const GameBoards = new GameBoard();
+    GameBoards.BuildBoard();
+    GameBoards.PlaceShip(4, 3, 1, true);
+    console.log(GameBoards.PlayerBoard)
+    expect(GameBoards.PlayerBoard).toStrictEqual([
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
 })
 
