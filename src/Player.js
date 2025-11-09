@@ -5,6 +5,5 @@ export class player {
         this.Win = 0;
         this.Lose = 0;
         this.PlayerBoard = new GameBoard();
-        this.Board = this.PlayerBoard.BuildBoard()
     }
 }

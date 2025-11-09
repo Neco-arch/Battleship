@@ -12,8 +12,6 @@ export class Createship {
     }
 
     Check_Sunk() {
-
         this.isSunk = true
-
     }
 }

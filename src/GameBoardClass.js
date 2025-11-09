@@ -9,75 +9,89 @@ export class GameBoard {
     this.shipCounter = 0;
   }
 
+  // Build Board from array
   BuildBoard() {
     this.PlayerBoard = [];
     for (let i = 0; i < 10; i++) {
-      let lengthArray = new Array(10).fill(0);
-      this.PlayerBoard.push(lengthArray);
+      this.PlayerBoard.push(new Array(10).fill(0));
     }
     return this.PlayerBoard;
   }
 
-  CheckPosition(X_axis, Y_axis, length) {
-    if (X_axis > 9 || X_axis < 0 || Y_axis > 9 || Y_axis < 0) {
-      return false;
-    }
+  // Check if the position is valid and not taken
+  CheckPosition(X_axis, Y_axis, length, Verti = false) {
+    if (X_axis < 0 || X_axis > 9 || Y_axis < 0 || Y_axis > 9) return false;
 
-    if (X_axis + length - 1 > 9) {
-      return false;
-    }
-
-    for (let i = X_axis; i < X_axis + length; i++) {
-      if (this.PlayerBoard[Y_axis][i] === 1) {
-        return false;
+    if (Verti) {
+      if (Y_axis + length - 1 > 9) return false;
+      for (let i = Y_axis; i < Y_axis + length; i++) {
+        if (this.PlayerBoard[i][X_axis] !== 0) return false;
+      }
+    } else {
+      if (X_axis + length - 1 > 9) return false;
+      for (let i = X_axis; i < X_axis + length; i++) {
+        if (this.PlayerBoard[Y_axis][i] !== 0) return false;
       }
     }
-
     return true;
   }
 
+  // Place ship on the board
   PlaceShip(X_axis, Y_axis, length, Verti = false) {
-    const OldX_axis = X_axis;
-    const OldY_axis = Y_axis;
-    if (this.CheckPosition(X_axis, Y_axis, length)) {
-      const CreateShip = new Createship(length);
-      this.shipCounter++;
-      if (Verti) {
-        for (let i = OldY_axis; i < OldY_axis + length; i++) {
-          this.PlayerBoard[i][X_axis] = 1;
-          CreateShip.position.push([X_axis, i]);
-        }
-      } else {
-        for (let i = OldX_axis; i < OldX_axis + length; i++) {
-          this.PlayerBoard[Y_axis][i] = 1;
-          CreateShip.position.push([i, Y_axis]);
-        }
-      }
-      this.ship.push(CreateShip);
-      return this.PlayerBoard;
-    } else {
+    if (this.PlayerBoard.length === 0) this.BuildBoard(); // auto build if not built
+
+    if (!this.CheckPosition(X_axis, Y_axis, length, Verti)) {
       return "X_axis or Y_axis is wrong or Position is already taken!";
     }
-  }
 
-  receiveAttack(X_axis, Y_axis) {
-    const ShipNode = this.FindShipName(X_axis, Y_axis);
-    if (ShipNode === "Ship not found") {
-      return;
-    }
-    this.PlayerBoard[Y_axis][X_axis] = "X";
-    ShipNode.hit();
-    if (ShipNode.length === ShipNode.HitsCounter) {
-      ShipNode.Check_Sunk();
-      for (let i = 0; i < this.ship.length; i++) {
-        if (this.ship[i].isSunk === true) {
-          this.ship.splice(i, 1);
-        }
+    const CreateShip = new Createship(length);
+    this.shipCounter++;
+
+    if (Verti) {
+      for (let i = Y_axis; i < Y_axis + length; i++) {
+        this.PlayerBoard[i][X_axis] = 1;
+        CreateShip.position.push([X_axis, i]);
+      }
+    } else {
+      for (let i = X_axis; i < X_axis + length; i++) {
+        this.PlayerBoard[Y_axis][i] = 1;
+        CreateShip.position.push([i, Y_axis]);
       }
     }
-    return ShipNode;
+
+    this.ship.push(CreateShip);
+    return this.PlayerBoard;
   }
 
+  // Receive an attack at a given position
+  receiveAttack(X_axis, Y_axis) {
+    if (X_axis < 0 || X_axis > 9 || Y_axis < 0 || Y_axis > 9)
+      return "Invalid coordinates!";
+
+    const currentCell = this.PlayerBoard[Y_axis][X_axis];
+    if (currentCell === "X" || currentCell === "O") return "Already attacked!";
+
+    const ShipNode = this.FindShipName(X_axis, Y_axis);
+
+    if (ShipNode === "Ship not found") {
+      this.PlayerBoard[Y_axis][X_axis] = "O";
+      this.MissedShot.push([X_axis, Y_axis]);
+      return "Missed!";
+    }
+
+    // Register a hit
+    this.PlayerBoard[Y_axis][X_axis] = "X";
+    ShipNode.hit();
+
+    if (ShipNode.length === ShipNode.HitsCounter) {
+      ShipNode.Check_Sunk();
+      this.ship = this.ship.filter((s) => !s.isSunk);
+    }
+
+    return "Hit!";
+  }
+
+  // Find the ship occupying given coordinates
   FindShipName(X_axis, Y_axis) {
     if (this.PlayerBoard[Y_axis][X_axis] === 1) {
       for (let ship of this.ship) {
@@ -87,17 +101,12 @@ export class GameBoard {
           }
         }
       }
-    } else {
-      this.PlayerBoard[Y_axis][X_axis] = "O";
-      this.MissedShot.push([X_axis, Y_axis]);
-      return "Ship not found";
     }
+    return "Ship not found";
   }
 
+  // Check if all ships are sunk
   CheckTheGameend() {
-    if (this.ship.length < 0) {
-      return false;
-    }
-    return true;
+    return this.ship.length === 0; // true means game over
   }
 }

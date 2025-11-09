@@ -1,4 +1,4 @@
-import { GameBoard } from "./GameBoardClass";
+import { GameBoard } from "../GameBoardClass";
 
 test("Can Create game board ", () => {
     const GameBoards = new GameBoard();
@@ -95,7 +95,7 @@ test("Can dectect ship name", () => {
     GameBoards.BuildBoard();
     GameBoards.PlaceShip(4, 3, 2);
     const findship = GameBoards.receiveAttack(4, 3)
-    expect(findship).toEqual({ "HitsCounter": 1, "isSunk": false, "length": 2, "position": [[4, 3], [5, 3]] });
+    expect(findship).toEqual("Hit!");
 });
 
 test("Can return ship not found", () => {
@@ -121,16 +121,15 @@ test("Can deleteship beacuse it's sunk", () => {
     expect(GameBoards.CheckTheGameend()).toEqual(true)
 })
 
-test("Can place ship horizontally", () => {
+test("Can place ship vertical", () => {
     const GameBoards = new GameBoard();
     GameBoards.BuildBoard();
-    GameBoards.PlaceShip(4, 3, 1, true);
-    console.log(GameBoards.PlayerBoard)
+    GameBoards.PlaceShip(4, 3, 2, true);
     expect(GameBoards.PlayerBoard).toStrictEqual([
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
