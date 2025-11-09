@@ -37,7 +37,26 @@ export class GameController {
             while (!placed) {
                 const X_axis = Math.floor(Math.random() * 10);
                 const Y_axis = Math.floor(Math.random() * 10);
-                const Verti = Math.random() < 0.5; // random orientation
+                const Verti = Math.random() < 0.5; // random Placement
+
+                if (this.AiPlayer.PlayerBoard.CheckPosition(X_axis, Y_axis, length, Verti)) {
+                    this.AiPlayer.PlayerBoard.PlaceShip(X_axis, Y_axis, length, Verti);
+                    placed = true;
+                }
+            }
+        }
+    }
+
+    // Randomly place Player ship ships (Choice)
+    PlayerRandomPlacement() {
+        for (let i = 0; i < this.PlaceShiplen.length; i++) {
+            const length = this.PlaceShiplen[i]
+            let placed = false
+
+            while (!placed) {
+                const X_axis = Math.floor(Math.random() * 10);
+                const Y_axis = Math.floor(Math.random() * 10);
+                const Verti = Math.random() < 0.5; // random Placement
 
                 if (this.AiPlayer.PlayerBoard.CheckPosition(X_axis, Y_axis, length, Verti)) {
                     this.AiPlayer.PlayerBoard.PlaceShip(X_axis, Y_axis, length, Verti);
