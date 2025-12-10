@@ -38,7 +38,7 @@ export class GameBoard {
 
   // Place ship on the board
   PlaceShip(X_axis, Y_axis, length, Verti = false) {
-    if (this.PlayerBoard.length === 0) this.BuildBoard(); // auto build if not built
+    if (this.PlayerBoard.length === 0) this.BuildBoard();
 
     if (!this.CheckPosition(X_axis, Y_axis, length, Verti)) {
       return "X_axis or Y_axis is wrong or Position is already taken!";
