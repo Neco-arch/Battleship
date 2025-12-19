@@ -1,6 +1,4 @@
 import "./Styles.css";
-import { GameBoard } from "./GameBoardClass";
-
 import { GameController } from "./GameController";
 
 class BuildBoardDom {
@@ -11,73 +9,67 @@ class BuildBoardDom {
         this.GameController.startGame();
     }
 
-    BuildBoardwithdiv(classname) {
-        if (classname) {
-            let columns = 10;
-            let rows = 10;
+    BuildBoardwithdiv(container) {
+        if (!container) return;
+        container.innerHTML = "";
 
-            for (let i = 0; i < rows; i++) {
-                const div_row = document.createElement("div");
-                div_row.className = "Board-Row-Style";
+        for (let i = 0; i < 10; i++) {
+            const div_row = document.createElement("div");
+            div_row.className = "Board-Row-Style";
 
-                for (let j = 0; j < columns; j++) {
-                    const div_cell = document.createElement("div");
-                    div_cell.className = "Board-Cell-Style";
-
-                    div_cell.dataset.row = i;
-                    div_cell.dataset.col = j;
-
-                    div_row.appendChild(div_cell);
-                }
-                this.Aiside.appendChild(div_row);
+            for (let j = 0; j < 10; j++) {
+                const div_cell = document.createElement("div");
+                div_cell.className = "Board-Cell-Style";
+                div_cell.dataset.row = i;
+                div_cell.dataset.col = j;
+                div_row.appendChild(div_cell);
             }
-        } else {
-            let columns = 10;
-            let rows = 10;
 
-            for (let i = 0; i < rows; i++) {
-                const div_row = document.createElement("div");
-                div_row.className = "Board-Row-Style";
+            container.appendChild(div_row);
+        }
+    }
 
-                for (let j = 0; j < columns; j++) {
-                    const div_cell = document.createElement("div");
-                    div_cell.className = "Board-Cell-Style";
+    RenderPlayerShips() {
+        if (!this.Playerside) return;
 
-                    div_cell.dataset.row = i;
-                    div_cell.dataset.col = j;
+        const boardData = this.GameController.RealPlayer.PlayerBoard.ship;
 
-                    div_row.appendChild(div_cell);
-                }
-                this.Playerside.appendChild(div_row);
+        console.log(boardData)
+
+        for (let i = 0; i < boardData.length; i++) {
+            const PositionArray = boardData[i].position
+            for (let j = 0; j < PositionArray.length; j++) {
+                const currentPos = PositionArray[j]
+                const cell = this.Playerside.querySelector(`.Board-Cell-Style[data-row="${currentPos[0]}"][data-col="${currentPos[1]}"]`)
+                console.log(cell)
+                cell.style.backgroundColor = "white"
             }
         }
     }
 
-    PlaceShipRandomlyonDOM() {
+    RandomizePlayerBoard() {
+        this.GameController.ResetPlayerside();
         this.GameController.PlayerRandomPlacement();
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
-                console.log(this.GameController.RealPlayer.PlayerBoard.PlayerBoard)
-                if (this.GameController.RealPlayer.PlayerBoard.PlayerBoard[i][j] === 1) {
-                    const cellchecker = `.Board-Cell-Style[data-row="${i}"][data-col="${j}"]`;
-                    const Cell = document.querySelector(cellchecker);
-                    Cell.style.backgroundColor = "white"
-                    console.log("Hello")
-                }
-            }
-        }
+        this.RenderPlayerShips();
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const BuildBoardFunction = new BuildBoardDom();
-    BuildBoardFunction.BuildBoardwithdiv();
-    BuildBoardFunction.BuildBoardwithdiv(true);
-    document.querySelectorAll(".Board-Cell-Style").forEach((Elements) => {
-        Elements.addEventListener("click", () => {
-            console.log(Elements.dataset);
-        });
-    });
-    BuildBoardFunction.PlaceShipRandomlyonDOM()
+    const gameUI = new BuildBoardDom();
 
+    gameUI.BuildBoardwithdiv(gameUI.Playerside);
+    gameUI.BuildBoardwithdiv(gameUI.Aiside);
+    gameUI.RandomizePlayerBoard();
+
+    const randomizeBtn = document.querySelector(".Randomize");
+
+    if (randomizeBtn) {
+        randomizeBtn.addEventListener("click", () => {
+            const allCells = document.querySelectorAll(".Board-Cell-Style");
+            allCells.forEach((cell) => {
+                cell.style.backgroundColor = "";
+            });
+            gameUI.RandomizePlayerBoard()
+        });
+    }
 });
