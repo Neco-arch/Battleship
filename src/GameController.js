@@ -6,7 +6,7 @@ export class GameController {
         this.CurrentTurn = null;
         this.RealPlayer = new player();
         this.AiPlayer = new player();
-        this.PlaceShiplen = [4, 3, 2, 2, 1];
+        this.PlaceShiplen = [4, 4, 2, 2, 1];
     }
 
     startGame() {
@@ -53,8 +53,14 @@ export class GameController {
             let placed = false;
 
             while (!placed) {
-                const row = Math.floor(Math.random() * 10);
-                const col = Math.floor(Math.random() * 10);
+                const RondomnumberAlgo = () => {
+                    const R = new Uint8Array(1);
+                    window.crypto.getRandomValues(R)
+                    return R[0] % 10
+
+                }
+                const row = RondomnumberAlgo();
+                const col = RondomnumberAlgo();
                 const isVertical = Math.random() < 0.5;
 
                 if (boardObj.CheckPosition(row, col, length, isVertical) &&
@@ -72,4 +78,17 @@ export class GameController {
         this.RealPlayer.PlayerBoard.BuildBoard();
     }
 
+    AttackDaBoard(X_axis, Y_axis, PlayerGotAttacked) {
+        if (PlayerGotAttacked === "Player") {
+            const Attack = this.RealPlayer.PlayerBoard.receiveAttack(X_axis, Y_axis);
+            this.CurrentTurn = "Player"
+            return
+        }
+
+        if (PlayerGotAttacked === "Ai") {
+            const Attack = this.AiPlayer.PlayerBoard.receiveAttack(X_axis, Y_axis)
+            this.CurrentTurn = "Ai"
+            return
+        }
+    }
 }
