@@ -29,6 +29,12 @@ body {
   height: 25px;
   font-family: "Comic Neue", cursive;
   margin-top: 10px;
+  border-radius: 5px;
+  border-style: none;
+}
+
+.Randomize:active {
+  color: gray;
 }
 
 .PlayerBoard , .AIBoard{
@@ -53,4 +59,11 @@ body {
 
 .Board-Cell-Style:hover {
   background-color: rgb(232, 224, 224);
+}
+
+.CurrentTurn {
+  display: flex;
+  font-size: 28px;
+  width: 200px;
+  justify-content: center;
 }
